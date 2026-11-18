@@ -39,3 +39,9 @@ class Fornecedor(Base):
     ativo = Column("ativo", Boolean, nullable=False, default=True)
     criado_em = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     criado_por = Column(BigInteger, ForeignKey("usuarios.id"), nullable=True)
+
+class Marca(Base):
+    __tablename__ = "marcas"
+
+    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
+    nome = Column("nome", String, nullable=False)
