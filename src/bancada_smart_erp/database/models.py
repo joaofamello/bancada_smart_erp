@@ -45,3 +45,10 @@ class Marca(Base):
 
     id = Column("id", BigInteger, primary_key=True, autoincrement=True)
     nome = Column("nome", String, nullable=False)
+
+class ModeloCelular(Base):
+    __tablename__ = "modelos_celulares"
+
+    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
+    nome = Column("nome", String, nullable=False)
+    marca_id = Column("marca_id", BigInteger, ForeignKey("marcas.id"), nullable=False)
