@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Boolean, BigInteger, String, Text, Enum, func, ForeignKey
+from sqlalchemy import Column, DateTime, Boolean, BigInteger, String, Text, Enum, func, ForeignKey, Float
 from bancada_smart_erp.database.database import Base
 
 class Usuario(Base):
@@ -58,4 +58,12 @@ class Categoria(Base):
 
     id = Column("id", BigInteger, primary_key=True, autoincrement=True)
     nome = Column("nome", String, nullable=False)
+
+class Servico(Base):
+    __tablename__ = "servicos"
+
+    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
+    nome = Column("nome", String, nullable=False)
+    preco_padrao = Column("preco_padrao", Float, nullable=False, default=0.0)
+    ativo = Column("ativo", Boolean, nullable=False, default=True)
 
