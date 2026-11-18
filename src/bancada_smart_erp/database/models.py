@@ -14,3 +14,15 @@ class Usuario(Base):
     ativo = Column("ativo", Boolean, nullable=False, default=True)
     criado_em = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     criado_por = Column(BigInteger, ForeignKey("usuarios.id"), nullable=True)
+
+class Cliente(Base):
+    __tablename__ = "clientes"
+
+    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
+    nome = Column("nome", String, nullable=False)
+    cpf = Column("cpf", String, nullable=False)
+    telefone = Column("telefone", String, nullable=False)
+    endereco = Column("endereco", Text, nullable=False)
+    ativo = Column("ativo", Boolean, nullable=False, default=True)
+    criado_em = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    criado_por = Column(BigInteger, ForeignKey("usuarios.id"), nullable=True)
