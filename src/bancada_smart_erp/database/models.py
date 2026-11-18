@@ -67,3 +67,9 @@ class Servico(Base):
     preco_padrao = Column("preco_padrao", Float, nullable=False, default=0.0)
     ativo = Column("ativo", Boolean, nullable=False, default=True)
 
+class TipoDefeito(Base):
+    __tablename__ = "tipos_defeitos"
+
+    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
+    nome = Column("nome", String, nullable=False)
+
