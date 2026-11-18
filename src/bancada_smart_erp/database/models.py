@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Boolean, BigInteger, String, Text, Enum, func, ForeignKey, Float
+from sqlalchemy import Column, DateTime, Boolean, Integer, BigInteger, String, Text, Enum, func, ForeignKey, Float
 from bancada_smart_erp.database.database import Base
 
 class Usuario(Base):
@@ -73,3 +73,19 @@ class TipoDefeito(Base):
     id = Column("id", BigInteger, primary_key=True, autoincrement=True)
     nome = Column("nome", String, nullable=False)
 
+class Produto(Base):
+    __tablename__ = "produtos"
+
+    TIPO_PRODUTO = Enum("aparelho", "acessorio", "peca", name="tipo_produto_enum")
+
+    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
+    tipo = Column("tipo", TIPO_PRODUTO, nullable=False)
+    nome = Column("nome", String, nullable=False)
+    categoria_id = Column("categoria_id", BigInteger, ForeignKey("categorias.id"), nullable=False)
+    preco_venda = Column("preco_venda", Float, nullable=False, default=0.0)
+    custo_medio = Column("custo_medio", Float, nullable=False, default=0.0)
+    estoque_atual = Column("estoque_atual", Integer, nullable=False, default=0)
+    estoque_minimo = Column("estoque_minimo", Integer, nullable=False, default=0)
+    ativo = Column("ativo", Boolean, default=True, nullable=False)
+    criado_em = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    criado_por = Column(BigInteger, ForeignKey("usuarios.id"), nullable=True)
