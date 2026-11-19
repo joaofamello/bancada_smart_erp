@@ -1,5 +1,7 @@
 from sqlalchemy import Column, DateTime, Boolean, Integer, BigInteger, String, Text, Enum, func, ForeignKey, Float, \
-    CheckConstraint, UniqueConstraint
+    CheckConstraint, UniqueConstraint, ForeignKeyConstraint
+from sqlalchemy.orm import relationship
+
 from bancada_smart_erp.database.database import Base
 
 class Usuario(Base):
@@ -94,3 +96,21 @@ class Produto(Base):
     )
     __mapper_args__ = {"polymorphic_on": tipo}
 
+class AparelhoModelo(Produto):
+    __tablename__ = "aparelhos_modelos"
+
+    id = Column("produto_id", BigInteger, primary_key=True)
+    tipo = Column(String(10), nullable=False, default="aparelho", server_default="aparelho")
+    modelo_celular_id = Column(BigInteger, ForeignKey("modelos_celulares.id"), nullable=False)
+    armazenamento_gb = Column(Integer)
+
+    modelo_celular = relationship("ModeloCelular")
+
+    __table_args__ = (
+        CheckConstraint("tipo = 'aparelho'", name="ck_aparelho_modelo_tipo"),
+        ForeignKeyConstraint(
+            ["produto_id", "tipo"],
+            ["produtos.id", "produtos.tipo"],
+        ),
+    )
+    __mapper_args__ = {"polymorphic_identity": "aparelho"}
