@@ -1,4 +1,5 @@
-from sqlalchemy import Column, DateTime, Boolean, Integer, BigInteger, String, Text, Enum, func, ForeignKey, Float
+from sqlalchemy import Column, DateTime, Boolean, Integer, BigInteger, String, Text, Enum, func, ForeignKey, Float, \
+    CheckConstraint, UniqueConstraint
 from bancada_smart_erp.database.database import Base
 
 class Usuario(Base):
@@ -76,16 +77,20 @@ class TipoDefeito(Base):
 class Produto(Base):
     __tablename__ = "produtos"
 
-    TIPO_PRODUTO = Enum("aparelho", "acessorio", "peca", name="tipo_produto_enum")
-
-    id = Column("id", BigInteger, primary_key=True, autoincrement=True)
-    tipo = Column("tipo", TIPO_PRODUTO, nullable=False)
-    nome = Column("nome", String, nullable=False)
-    categoria_id = Column("categoria_id", BigInteger, ForeignKey("categorias.id"), nullable=False)
-    preco_venda = Column("preco_venda", Float, nullable=False, default=0.0)
-    custo_medio = Column("custo_medio", Float, nullable=False, default=0.0)
-    estoque_atual = Column("estoque_atual", Integer, nullable=False, default=0)
-    estoque_minimo = Column("estoque_minimo", Integer, nullable=False, default=0)
-    ativo = Column("ativo", Boolean, default=True, nullable=False)
+    id = Column(BigInteger, primary_key=True)
+    tipo = Column(String(10), nullable=False)
+    nome = Column(String(150), nullable=False)
+    preco_venda = Column(Float, nullable=False, default=0)
+    custo_medio = Column(Float, nullable=False, default=0)
+    estoque_atual = Column(Integer, nullable=False, default=0)
+    estoque_minimo = Column(Integer, nullable=False, default=0)
+    ativo = Column("ativo", Boolean, nullable=False, default=True)
     criado_em = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     criado_por = Column(BigInteger, ForeignKey("usuarios.id"), nullable=True)
+
+    __table_args__ = (
+        CheckConstraint("tipo IN ('aparelho','acessorio','peca')", name="ck_produto_tipo"),
+        UniqueConstraint("id", "tipo", name="uq_produto_id_tipo"),
+    )
+    __mapper_args__ = {"polymorphic_on": tipo}
+
